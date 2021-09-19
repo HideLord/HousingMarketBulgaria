@@ -39,15 +39,14 @@ public class MainFrame extends JFrame implements ActionListener {
 		gbc.weightx = 80.0/getWidth();
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		JScrollPane pane = new JScrollPane(m_searchPanel);
-		pane.getVerticalScrollBar().setUnitIncrement(16);
-		add(pane, gbc);
+		add(m_searchPanel, gbc);
 
 		gbc.weightx = 1.0-80.0/getWidth();
 		gbc.gridx = 1;
 		gbc.gridy = 0;
-		pane = new JScrollPane(m_itemPanel);
+		JScrollPane pane = new JScrollPane(m_itemPanel);
 		pane.getVerticalScrollBar().setUnitIncrement(16);
+		pane.getHorizontalScrollBar().setUnitIncrement(16);
 		add(pane, gbc);
 	}
 	

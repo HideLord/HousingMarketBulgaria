@@ -5,22 +5,24 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
 import housing.gui.SearchPanel.Criteria;
 import housing.logic.Calculator;
 import housing.logic.House;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Scene;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 
 public class ItemPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -74,21 +76,24 @@ public class ItemPanel extends JPanel {
 		}
 		
 		public void openListing() {
-			JEditorPane jep = new JEditorPane();
-			jep.setEditable(false);
+			final JFrame frame = new JFrame();
+			frame.setSize(1600, 1000);
+			final JFXPanel fxpanel = new JFXPanel();
+			frame.add(fxpanel);
 
-			try {
-				System.out.println("Trying to open: " + m_house.fullListingUrl);
-				jep.setPage(m_house.fullListingUrl);
-			} catch (IOException e) {
-				jep.setContentType("text/html");
-				jep.setText("<html>Listing no longer exists or could not be loaded.</html>");
-			}
-
-			JFrame listingFrame = new JFrame("Open listing");
-			listingFrame.getContentPane().add(new JScrollPane(jep));
-			listingFrame.setSize(1600, 1000);
-			listingFrame.setVisible(true);
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					WebEngine engine;
+					WebView wv = new WebView();
+					engine = wv.getEngine();
+					fxpanel.setScene(new Scene(wv));
+					
+					System.out.println("Trying to open: " + m_house.fullListingUrl);
+					engine.load(m_house.fullListingUrl);
+				}
+			});
+			frame.setVisible(true);
 		}
 		
 		@Override
@@ -128,6 +133,7 @@ public class ItemPanel extends JPanel {
 		}
 		
 		revalidate();
+		repaint();
 	}
 	
 	public void reset(List<House> _houses) {

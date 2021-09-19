@@ -1,20 +1,51 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.housing</groupId>
-  <artifactId>housing</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>Housing Price Index</name>
-  <description>Calculates the Bulgarian housing price index</description>
-  <dependencies>
-	<dependency>
-	    <groupId>org.jsoup</groupId>
-	    <artifactId>jsoup</artifactId>
-	    <version>1.14.2</version>
-	</dependency>
-	<dependency>
-	    <groupId>org.apache.commons</groupId>
-	    <artifactId>commons-lang3</artifactId>
-	    <version>3.12.0</version>
-	</dependency>
-  </dependencies> 
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.housing</groupId>
+	<artifactId>housing</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>Housing Price Index</name>
+	<description>Calculates the Bulgarian housing price index</description>
+	<repositories>
+	</repositories>
+	<dependencies>
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.14.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.12.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+			<version>17</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-web</artifactId>
+			<version>18-ea+2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-swing</artifactId>
+			<version>18-ea+2</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-maven-plugin</artifactId>
+				<version>0.0.7</version>
+				<configuration>
+					<mainClass>HelloFX</mainClass>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

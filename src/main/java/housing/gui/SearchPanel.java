@@ -1,24 +1,31 @@
 package housing.gui;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
-import javax.swing.BoxLayout;
-import javax.swing.JComboBox;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import housing.logic.House;
 
 public class SearchPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	
-	private JComboBox<String> m_cityCombo = new JComboBox<>();
-	private JComboBox<String> m_neighborCombo = new JComboBox<>();
-	private JComboBox<Integer> m_floorCombo = new JComboBox<>();
+	private static final String CITY_COMMAND = "C";
+	private static final String NEIGHBORHOOD_COMMAND = "N";
+	private static final String FLOOR_COMMAND = "F";
+	
+	private SearchGroup m_cities = new SearchGroup(CITY_COMMAND);
+	private SearchGroup m_neighborhoods = new SearchGroup(NEIGHBORHOOD_COMMAND);
+	private SearchGroup m_floors = new SearchGroup(FLOOR_COMMAND);
 	
 	private List<ActionListener> m_listeners = new ArrayList<>();
 	
@@ -70,13 +77,16 @@ public class SearchPanel extends JPanel implements ActionListener {
 	/**
 	 * Adds all the values to the comboBox and additionally appends "Match All" to the list.
 	 */
-	private static <T> void resetComboBox(JComboBox<T> _comboBox, Set<T> _values) {
-		_comboBox.removeAllItems();
-
-		_comboBox.addItem(null);
-		for(T value : _values) {
-			_comboBox.addItem(value);
+	private static <T> void resetPanel(SearchGroup _panel, Set<T> _values) {
+		_panel.removeAll();
+		for(T val : _values) {
+			JCheckBox checkBox = new JCheckBox(val.toString());
+			checkBox.addActionListener(_panel);
+			_panel.add(checkBox);
+			
 		}
+		_panel.revalidate();
+		_panel.repaint();
 	}
 	
 	/**
@@ -88,9 +98,9 @@ public class SearchPanel extends JPanel implements ActionListener {
 	 * </pre>
 	 */
 	public void reset(List<House> _houses) {
-		Set<String> cities = new HashSet<>();
-		Set<String> neighborhoods = new HashSet<>();
-		Set<Integer> floors = new HashSet<>();
+		Set<String> cities = new TreeSet<>();
+		Set<String> neighborhoods = new TreeSet<>();
+		Set<Integer> floors = new TreeSet<>();
 		
 		for(House house : _houses) {
 			cities.add(house.city);
@@ -100,9 +110,9 @@ public class SearchPanel extends JPanel implements ActionListener {
 			}
 		}
 		
-		resetComboBox(m_cityCombo, cities);
-		resetComboBox(m_neighborCombo, neighborhoods);
-		resetComboBox(m_floorCombo, floors);
+		resetPanel(m_cities, cities);
+		resetPanel(m_neighborhoods, neighborhoods);
+		resetPanel(m_floors, floors);
 	}
 	
 	private void onUpdate() {
@@ -110,16 +120,32 @@ public class SearchPanel extends JPanel implements ActionListener {
 			listener.actionPerformed(new ActionEvent(this,0,null));
 		}
 	}
+	
 	private void manageCity(ActionEvent e) {
-		m_criteria.m_city.add((String)m_cityCombo.getSelectedItem());
+		JCheckBox chBox = (JCheckBox) e.getSource();
+		if(chBox.isSelected()) {
+			m_criteria.m_city.add(chBox.getText());
+	    } else {
+			m_criteria.m_city.remove(chBox.getText());
+		}
 		onUpdate();
 	}
 	private void manageNeighborhood(ActionEvent e) {
-		m_criteria.m_neighborhood.add((String)m_neighborCombo.getSelectedItem());
+		JCheckBox chBox = (JCheckBox) e.getSource();
+		if(chBox.isSelected()) {
+			m_criteria.m_neighborhood.add(chBox.getText());
+	    } else {
+			m_criteria.m_neighborhood.remove(chBox.getText());
+		}
 		onUpdate();
 	}
 	private void manageFloor(ActionEvent e) {
-		m_criteria.m_floor.add((Integer)m_floorCombo.getSelectedItem());
+		JCheckBox chBox = (JCheckBox) e.getSource();
+		if(chBox.isSelected()) {
+			m_criteria.m_floor.add(Integer.valueOf(chBox.getText()));
+	    } else {
+			m_criteria.m_floor.remove(Integer.valueOf(chBox.getText()));
+		}
 		onUpdate();
 	}
 	
@@ -128,12 +154,18 @@ public class SearchPanel extends JPanel implements ActionListener {
 	 */
 	@Override
     public void actionPerformed(ActionEvent e) {
-    	if(m_cityCombo == e.getSource()) {
-    		manageCity(e);
-    	} else if(m_neighborCombo == e.getSource()) {
-    		manageNeighborhood(e);
-    	} else if(m_floorCombo == e.getSource()) {
-    		manageFloor(e);
+    	if(e.getSource() instanceof JCheckBox) {
+    		switch(e.getActionCommand()) {
+    		case CITY_COMMAND:
+    			manageCity(e);
+    			break;
+    		case NEIGHBORHOOD_COMMAND:
+    			manageNeighborhood(e);
+    			break;
+    		case FLOOR_COMMAND:
+    			manageFloor(e);
+    			break;
+    		}
     	} else {
     		throw new UnsupportedOperationException("Unknown source detected: " + e.getSource().toString());
     	}
@@ -144,14 +176,34 @@ public class SearchPanel extends JPanel implements ActionListener {
 	}
 
 	SearchPanel() {
-		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		setLayout(new GridBagLayout());
 		
-		m_cityCombo.addActionListener(this);
-		m_neighborCombo.addActionListener(this);
-		m_floorCombo.addActionListener(this);
+		m_cities.addActionListener(this);
+		m_neighborhoods.addActionListener(this);
+		m_floors.addActionListener(this);
 		
-		add(m_cityCombo);
-		add(m_neighborCombo);
-		add(m_floorCombo);
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridx = 0;
+		gbc.weightx = 1.0;
+		gbc.fill = GridBagConstraints.BOTH;
+		
+		gbc.gridy = 0;
+		gbc.weighty = 0.1;
+		
+		JScrollPane pane = new JScrollPane(m_cities);
+		pane.getVerticalScrollBar().setUnitIncrement(16);
+		add(pane, gbc);
+		
+		gbc.gridy = 1;
+		gbc.weighty = 0.7;
+		pane = new JScrollPane(m_neighborhoods);
+		pane.getVerticalScrollBar().setUnitIncrement(16);
+		add(pane, gbc);
+		
+		gbc.gridy = 2;
+		gbc.weighty = 0.2;
+		pane = new JScrollPane(m_floors);
+		pane.getVerticalScrollBar().setUnitIncrement(16);
+		add(pane, gbc);
 	}
 }
