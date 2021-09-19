@@ -8,8 +8,6 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JFrame;
-
 import housing.gui.MainFrame;
 import housing.logic.Calculator;
 import housing.logic.House;
@@ -52,14 +50,12 @@ public class Main {
 			List<House> houses = parsePages(SOFIA_NEW, new ImotiComParser(), 100);
 			saveTo("houses.data", houses);
 			
-			Calculator calc = new Calculator();
-			
 			System.out.println("Parsed " + houses.size() + " houses");
 			
-			calc.averagePricePerFloor(houses);
-			calc.averagePrice(houses);
+			Calculator.averagePricePerFloor(houses);
+			Calculator.averagePrice(houses);
 			System.out.println("\n\n");
-			calc.averagePricePerNeighborhood(houses);
+			Calculator.averagePricePerNeighborhood(houses);
 			
 		} catch (IOException e) {
 			e.printStackTrace();

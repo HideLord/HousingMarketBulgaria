@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 
 import housing.logic.House;
 
@@ -38,12 +39,16 @@ public class MainFrame extends JFrame implements ActionListener {
 		gbc.weightx = 80.0/getWidth();
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		add(m_searchPanel, gbc);
+		JScrollPane pane = new JScrollPane(m_searchPanel);
+		pane.getVerticalScrollBar().setUnitIncrement(16);
+		add(pane, gbc);
 
 		gbc.weightx = 1.0-80.0/getWidth();
 		gbc.gridx = 1;
 		gbc.gridy = 0;
-		add(m_itemPanel, gbc);
+		pane = new JScrollPane(m_itemPanel);
+		pane.getVerticalScrollBar().setUnitIncrement(16);
+		add(pane, gbc);
 	}
 	
 	@Override

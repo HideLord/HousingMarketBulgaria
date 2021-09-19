@@ -23,26 +23,26 @@ public class SearchPanel extends JPanel implements ActionListener {
 	private List<ActionListener> m_listeners = new ArrayList<>();
 	
 	public static class Criteria implements Cloneable {
-		private String m_city;
-		private String m_neighborhood;
-		private Integer m_floor;
+		private Set<String> m_city = new HashSet<>();
+		private Set<String> m_neighborhood = new HashSet<>();
+		private Set<Integer> m_floor = new HashSet<>();
 		
 		public boolean matchCity(String city) {
-			if(m_city == null)
+			if(m_city.isEmpty())
 				return true;
-			return m_city.equals(city);
+			return m_city.contains(city);
 		}
 		
 		public boolean matchNeighborhood(String _neighborhood) {
-			if(m_neighborhood == null)
+			if(m_neighborhood.isEmpty())
 				return true;
-			return m_neighborhood.equals(_neighborhood);
+			return m_neighborhood.contains(_neighborhood);
 		}
 		
 		public boolean matchFloor(Integer _floor) {
-			if(m_floor == null)
+			if(m_floor.isEmpty())
 				return true;
-			return m_floor.equals(_floor);
+			return m_floor.contains(_floor);
 		}
 		
 		public boolean matchesHouse(House _house) {
@@ -54,9 +54,9 @@ public class SearchPanel extends JPanel implements ActionListener {
 		@Override
 		protected Object clone() throws CloneNotSupportedException {
 			Criteria thisClone = new Criteria();
-			thisClone.m_city = m_city;
-			thisClone.m_neighborhood = m_neighborhood;
-			thisClone.m_floor = m_floor;
+			thisClone.m_city.addAll(m_city);
+			thisClone.m_neighborhood.addAll(m_neighborhood);
+			thisClone.m_floor.addAll(m_floor);
 			
 			return thisClone;
 		}
@@ -111,15 +111,15 @@ public class SearchPanel extends JPanel implements ActionListener {
 		}
 	}
 	private void manageCity(ActionEvent e) {
-		m_criteria.m_city = (String)m_cityCombo.getSelectedItem();
+		m_criteria.m_city.add((String)m_cityCombo.getSelectedItem());
 		onUpdate();
 	}
 	private void manageNeighborhood(ActionEvent e) {
-		m_criteria.m_neighborhood = (String)m_neighborCombo.getSelectedItem();
+		m_criteria.m_neighborhood.add((String)m_neighborCombo.getSelectedItem());
 		onUpdate();
 	}
 	private void manageFloor(ActionEvent e) {
-		m_criteria.m_floor = (Integer)m_floorCombo.getSelectedItem();
+		m_criteria.m_floor.add((Integer)m_floorCombo.getSelectedItem());
 		onUpdate();
 	}
 	
