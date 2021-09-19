@@ -35,12 +35,12 @@ public class MainFrame extends JFrame implements ActionListener {
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.weighty = 1.0;
 		
-		gbc.weightx = 200.0/getWidth();
+		gbc.weightx = 80.0/getWidth();
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		add(m_searchPanel, gbc);
 
-		gbc.weightx = 1.0-200.0/getWidth();
+		gbc.weightx = 1.0-80.0/getWidth();
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		add(m_itemPanel, gbc);

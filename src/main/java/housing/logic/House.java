@@ -12,7 +12,7 @@ public class House implements Serializable{
 	public String city;
 	public String fullListingUrl;
 	
-	double getPricePerSqM() {
+	public double getPricePerSqM() {
 		return (double)priceEuro / (double)sqM;
 	}
 }

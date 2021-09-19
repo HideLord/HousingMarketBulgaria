@@ -49,7 +49,7 @@ public class Main {
 	
 	static void run() {
 		try {
-			List<House> houses = parsePages(SOFIA_NEW, new ImotiComParser(), 10);
+			List<House> houses = parsePages(SOFIA_NEW, new ImotiComParser(), 100);
 			saveTo("houses.data", houses);
 			
 			Calculator calc = new Calculator();

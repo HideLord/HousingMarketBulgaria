@@ -50,7 +50,10 @@ public class ImotiComParser implements HouseParser {
 		try {
 			House thisHouse = new House();
 			
-			thisHouse.fullListingUrl = _info.parent().child(0).absUrl("href");
+			thisHouse.fullListingUrl = _info.parent().getElementsByAttribute("href").get(0).absUrl("href");
+			if(thisHouse.fullListingUrl == null || thisHouse.fullListingUrl.isEmpty()) {
+				throw new UnexpectedException(_info.parent().toString());
+			}
 			
 			Elements priceElements = _info.getElementsByClass("price");
 			if(priceElements.size() == 0) {
