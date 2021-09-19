@@ -1,4 +1,4 @@
-package housing.parsing;
+package housing.logic.parsing;
 
 import java.io.IOException;
 import java.rmi.UnexpectedException;
@@ -12,7 +12,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import housing.calc.House;
+import housing.logic.House;
 
 public class ImotiComParser implements HouseParser {
 
@@ -70,7 +70,7 @@ public class ImotiComParser implements HouseParser {
 			Matcher m = LOCATION_SQM_PATTERN.matcher(location);
 			if(m.find()) {
 				thisHouse.city = m.group(1);
-				thisHouse.neighbourhood = m.group(2);
+				thisHouse.neighborhood = m.group(2);
 				thisHouse.sqM = Integer.valueOf(m.group(3));
 			}
 			

@@ -1,4 +1,4 @@
-package housing.calc;
+package housing.logic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +10,8 @@ public class Calculator {
 		List<Double> avg = new ArrayList<>();
 		List<Integer> num = new ArrayList<>();
 		for(House house : houses) {
+			if(house.floor == null)
+				continue;
 			while(avg.size() <= house.floor) {
 				avg.add(0.0);
 				num.add(0);
@@ -36,10 +38,10 @@ public class Calculator {
 	public void averagePricePerNeighborhood(List<House> houses) {
 		Map<String, List<House>> map = new HashMap<>();
 		for(House house : houses) {
-			if(!map.containsKey(house.neighbourhood)) {
-				map.put(house.neighbourhood, new ArrayList<House>());
+			if(!map.containsKey(house.neighborhood)) {
+				map.put(house.neighborhood, new ArrayList<House>());
 			}
-			map.get(house.neighbourhood).add(house);
+			map.get(house.neighborhood).add(house);
 		}
 		
 		for(Map.Entry<String, List<House>> entry: map.entrySet()) {

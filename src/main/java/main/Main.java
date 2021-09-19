@@ -10,10 +10,11 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
-import housing.calc.Calculator;
-import housing.calc.House;
-import housing.parsing.HouseParser;
-import housing.parsing.ImotiComParser;
+import housing.gui.MainFrame;
+import housing.logic.Calculator;
+import housing.logic.House;
+import housing.logic.parsing.HouseParser;
+import housing.logic.parsing.ImotiComParser;
 
 public class Main {
 	static final String VARNA = "https://www.imot.bg/pcgi/imot.cgi?act=3&slink=74cqub&f1=";
@@ -48,7 +49,7 @@ public class Main {
 	
 	static void run() {
 		try {
-			List<House> houses = parsePages(SOFIA_NEW, new ImotiComParser(), 2);
+			List<House> houses = parsePages(SOFIA_NEW, new ImotiComParser(), 10);
 			saveTo("houses.data", houses);
 			
 			Calculator calc = new Calculator();
@@ -65,15 +66,13 @@ public class Main {
 		}
 	}
 	
-	static void runGui() {
-		JFrame mainWindow = new JFrame();
-		mainWindow.setTitle("Bulgaria housing");
-		mainWindow.setSize(600, 600);
-		mainWindow.setVisible(true);
-		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	static void runGui() throws ClassNotFoundException, IOException {
+		MainFrame frame = new MainFrame();
+		frame.reset(loadFrom("houses.data"));
 	}
 	
 	public static void main(String[] args) throws Exception {
+		//run();
 		runGui();
 	}
 }

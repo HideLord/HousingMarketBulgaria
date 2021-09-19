@@ -1,5 +1,6 @@
-package housing.parsing;
+package housing.logic.parsing;
 import java.io.IOException;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -10,7 +11,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import housing.calc.House;
+import housing.logic.House;
 
 public class ImotBgParser implements HouseParser {
 	
@@ -51,7 +52,7 @@ public class ImotBgParser implements HouseParser {
 				Matcher m = LOCATION_PATTERN.matcher(el.text());
 				if(m.find()) {
 					thisHouse.city = m.group(1);
-					thisHouse.neighbourhood = m.group(2);
+					thisHouse.neighborhood = m.group(2);
 					thisHouse.fullListingUrl = el.absUrl("href");
 					break;
 				}
@@ -67,6 +68,8 @@ public class ImotBgParser implements HouseParser {
 			m = SQM_PATTERN.matcher(description);
 			if(m.find()) {
 				thisHouse.sqM = Integer.valueOf(m.group(1));
+			} else {
+				throw new InvalidParameterException("Could not find sq.m.");
 			}
 			
 			return thisHouse;

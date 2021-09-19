@@ -1,4 +1,4 @@
-package housing.calc;
+package housing.logic;
 
 import java.io.Serializable;
 
@@ -7,8 +7,8 @@ public class House implements Serializable{
 	
 	public int priceEuro;
 	public int sqM;
-	public int floor;
-	public String neighbourhood;
+	public Integer floor; // can be null if there is no floor in the listing
+	public String neighborhood;
 	public String city;
 	public String fullListingUrl;
 	
