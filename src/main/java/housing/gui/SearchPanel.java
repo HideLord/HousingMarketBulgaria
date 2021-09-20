@@ -2,6 +2,7 @@ package housing.gui;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -10,9 +11,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
 import housing.logic.House;
 
@@ -23,9 +25,9 @@ public class SearchPanel extends JPanel implements ActionListener {
 	private static final String NEIGHBORHOOD_COMMAND = "N";
 	private static final String FLOOR_COMMAND = "F";
 	
-	private SearchGroup m_cities = new SearchGroup(CITY_COMMAND);
-	private SearchGroup m_neighborhoods = new SearchGroup(NEIGHBORHOOD_COMMAND);
-	private SearchGroup m_floors = new SearchGroup(FLOOR_COMMAND);
+	private SearchGroup m_cities;
+	private SearchGroup m_neighborhoods;
+	private SearchGroup m_floors;
 	
 	private List<ActionListener> m_listeners = new ArrayList<>();
 	
@@ -78,11 +80,9 @@ public class SearchPanel extends JPanel implements ActionListener {
 	 * Adds all the values to the comboBox and additionally appends "Match All" to the list.
 	 */
 	private static <T> void resetPanel(SearchGroup _panel, Set<T> _values) {
-		_panel.removeAll();
+		_panel.removeAllCheckBoxes();
 		for(T val : _values) {
-			JCheckBox checkBox = new JCheckBox(val.toString());
-			checkBox.addActionListener(_panel);
-			_panel.add(checkBox);
+			_panel.add(new JCheckBox(val.toString()));
 			
 		}
 		_panel.revalidate();
@@ -178,6 +178,10 @@ public class SearchPanel extends JPanel implements ActionListener {
 	SearchPanel() {
 		setLayout(new GridBagLayout());
 		
+		m_cities = new SearchGroup(CITY_COMMAND, new JLabel("Cities", new ImageIcon(new ImageIcon("images/city.png").getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT)), JLabel.RIGHT));
+		m_neighborhoods = new SearchGroup(NEIGHBORHOOD_COMMAND, new JLabel("Neighborhoods", new ImageIcon(new ImageIcon("images/neighborhood.png").getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT)), JLabel.RIGHT));
+		m_floors = new SearchGroup(FLOOR_COMMAND, new JLabel("Floor", new ImageIcon(new ImageIcon("images/floor.png").getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT)), JLabel.RIGHT));
+		
 		m_cities.addActionListener(this);
 		m_neighborhoods.addActionListener(this);
 		m_floors.addActionListener(this);
@@ -188,22 +192,15 @@ public class SearchPanel extends JPanel implements ActionListener {
 		gbc.fill = GridBagConstraints.BOTH;
 		
 		gbc.gridy = 0;
-		gbc.weighty = 0.1;
-		
-		JScrollPane pane = new JScrollPane(m_cities);
-		pane.getVerticalScrollBar().setUnitIncrement(16);
-		add(pane, gbc);
+		gbc.weighty = 0.05;
+		add(m_cities, gbc);
 		
 		gbc.gridy = 1;
-		gbc.weighty = 0.7;
-		pane = new JScrollPane(m_neighborhoods);
-		pane.getVerticalScrollBar().setUnitIncrement(16);
-		add(pane, gbc);
+		gbc.weighty = 0.65;
+		add(m_neighborhoods, gbc);
 		
 		gbc.gridy = 2;
-		gbc.weighty = 0.2;
-		pane = new JScrollPane(m_floors);
-		pane.getVerticalScrollBar().setUnitIncrement(16);
-		add(pane, gbc);
+		gbc.weighty = 0.3;
+		add(m_floors, gbc);
 	}
 }
